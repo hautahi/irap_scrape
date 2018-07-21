@@ -1,3 +1,9 @@
+"""
+This program scrapes see also and external links based on a collection of some "source" Wikipedia pages.
+
+@author: hautahi
+"""
+
 from bs4 import BeautifulSoup as bs
 import requests
 from urlparse import urlparse

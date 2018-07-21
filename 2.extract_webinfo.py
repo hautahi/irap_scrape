@@ -3,12 +3,9 @@ This program extracts information from the front page of the list of scraped can
 """
 
 from bs4 import BeautifulSoup as bs
-import requests
-from urlparse import urlparse
 import pandas as pd
-import urllib, re
 import time
-from irap_scrape import make_soup
+from functionfile import make_soup
 
 print("Extracting Information from Organization Websites...")
 start = time.time()

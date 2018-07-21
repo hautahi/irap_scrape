@@ -8,28 +8,44 @@ import time
 print("Manually adjusting results...")
 start = time.time()
 
-# ------------------------------
-# Manually exclude candidates
-# ------------------------------
-
 # Read in data of scraped candidates
 df = pd.read_csv("./output/preliminary_scraped_candidates.csv")
+
+# ------------------------------
+# Manually exclude candidates based on exact websites
+# ------------------------------
 
 # Extract the scraped webpage information to a list
 STR = df["Candidate Organization Link"].tolist()
 
 # Pages to exclude
-excl = ["http://www.horsetalk.co.nz","https://www.youtube.com","http://www.ausae.org.au",
-"http://online.lewisu.edu","http://www.indymedia.org.uk","http://www.britishfashioncouncil.com",
-"http://www.britishfashioncouncil.co.uk","http://www.tim.hawaii.edu","http://www.lsionline.co.uk",
-"http://www.abtt.org.uk","http://www.bsria.co.uk","http://www.safelincs.co.uk",
-"http://www.safelincs.co.uk","http://www.stern.nyu.edu","http://bmj.bmjjournals.com",
-"http://www.abpi.org.uk","http://www.HIMAA2.org.au"]
+excl = ["http://www.horsetalk.co.nz","https://www.youtube.com","http://online.lewisu.edu","http://www.britishfashioncouncil.com", "http://www.tim.hawaii.edu","http://www.stern.nyu.edu","http://bmj.bmjjournals.com","http://law.jrank.org"]
 
 # Filter datafame based on excluded websites above
 exclude = [False if x in excl else True for x in STR]
 df["exclude"] = exclude
 d = df.loc[df['exclude'] == True]
+
+# ------------------------------
+# Manually exclude candidates based on presence of strings
+# ------------------------------
+
+# Extract the scraped webpage information to a list
+STR = d["Candidate Organization Link"].tolist()
+
+# Filter based on existence of some string
+excstrings = [".org.uk",".gov",".co.uk",".org.au"]
+
+exclude1 = []
+for str1 in STR:
+    if any(s in str1 for s in excstrings):
+        exclude1.append(True)
+    else:
+        exclude1.append(False)
+
+# Filter datafame based on excluded websites above
+d["exclude1"] = exclude1
+d = d.loc[d['exclude1'] == True]
 
 # Tidy up
 d = d[['Candidate Organization Link','Industry','Industry Group Description','Candidate Organization Name','Contact Information']]
